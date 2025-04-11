@@ -1,0 +1,76 @@
+{
+  "Mathematics_class5_english": [
+    {
+      "question": "What is 25 + 37?",
+      "options": {"A": "52", "B": "62", "C": "72", "D": "42"},
+      "correct_answer": "B",
+      "explanation": "To add 25 and 37, we add the ones place (5+7=12) and carry the 1 to the tens place. Then we add the tens place (2+3+1=6). So the answer is 62.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "Which fraction is equivalent to 1/2?",
+      "options": {"A": "2/5", "B": "3/5", "C": "2/4", "D": "3/4"},
+      "correct_answer": "C",
+      "explanation": "2/4 can be simplified to 1/2 by dividing both numerator and denominator by 2.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "What is the perimeter of a square with side length 6 cm?",
+      "options": {"A": "24 cm", "B": "36 cm", "C": "12 cm", "D": "18 cm"},
+      "correct_answer": "A",
+      "explanation": "The perimeter of a square is 4 times the side length. So 4 × 6 cm = 24 cm.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "How many minutes are there in 2 hours?",
+      "options": {"A": "60", "B": "90", "C": "120", "D": "180"},
+      "correct_answer": "C",
+      "explanation": "1 hour = 60 minutes, so 2 hours = 2 × 60 = 120 minutes.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "What is the place value of 7 in the number 3,275?",
+      "options": {"A": "7", "B": "70", "C": "700", "D": "7000"},
+      "correct_answer": "B",
+      "explanation": "The 7 is in the tens place, so its place value is 70.",
+      "video_url": "URL_PLACEHOLDER"
+    }
+  ],
+  "Science_class5_english": [
+    {
+      "question": "Which of these is a source of natural light?",
+      "options": {"A": "Candle", "B": "Torch", "C": "Sun", "D": "Bulb"},
+      "correct_answer": "C",
+      "explanation": "The Sun is a natural source of light, while candles, torches, and bulbs are artificial sources of light.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "Plants make their food through which process?",
+      "options": {"A": "Respiration", "B": "Photosynthesis", "C": "Digestion", "D": "Transpiration"},
+      "correct_answer": "B",
+      "explanation": "Plants make their food through photosynthesis, using sunlight, water, and carbon dioxide.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "Which of these is not a state of matter?",
+      "options": {"A": "Solid", "B": "Liquid", "C": "Energy", "D": "Gas"},
+      "correct_answer": "C",
+      "explanation": "The three states of matter are solid, liquid, and gas. Energy is not a state of matter.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "Which organ helps us breathe?",
+      "options": {"A": "Heart", "B": "Lungs", "C": "Kidney", "D": "Brain"},
+      "correct_answer": "B",
+      "explanation": "Lungs are the organs that help us breathe by taking in oxygen and releasing carbon dioxide.",
+      "video_url": "URL_PLACEHOLDER"
+    },
+    {
+      "question": "What is the main function of roots in a plant?",
+      "options": {"A": "To make food", "B": "To absorb water and minerals", "C": "To produce flowers", "D": "To produce fruits"},
+      "correct_answer": "B",
+      "explanation": "The main function of roots is to absorb water and minerals from the soil for the plant.",
+      "video_url": "URL_PLACEHOLDER"
+    }
+  ]
+}

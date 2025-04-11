@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyAi Quiz Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .quiz-selector {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .quiz-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .quiz-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .options {
+            margin-bottom: 15px;
+        }
+        .option {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #f9f9f9;
+        }
+        .option.selected {
+            background-color: #e1f5fe;
+            border-color: #4fc3f7;
+        }
+        .option.correct {
+            background-color: #e8f5e9;
+            border-color: #66bb6a;
+        }
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: #ef5350;
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            display: none;
+        }
+        .check-answer {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .check-answer:hover {
+            background-color: #1976d2;
+        }
+        .error-message {
+            color: #e53935;
+            text-align: center;
+            padding: 20px;
+            background-color: #ffebee;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>VidyAi Quiz Viewer</h1>
+    
+    <div class="quiz-selector">
+        <label for="quiz-select">Select a Quiz:</label>
+        <select id="quiz-select">
+            <option value="">-- Select a Quiz --</option>
+        </select>
+    </div>
+    
+    <div id="quiz-container" class="quiz-container" style="display: none;">
+        <!-- Quiz questions will be loaded here -->
+    </div>
+    
+    <div id="error-message" class="error-message">
+        Unable to load quiz data. Please try again later.
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizSelect = document.getElementById('quiz-select');
+            const quizContainer = document.getElementById('quiz-container');
+            const errorMessage = document.getElementById('error-message');
+            let quizzes = {};
+            
+            // Load quiz data
+            fetch('static/quizzes.json')
+                .then(response => response.json())
+                .then(data => {
+                    try {
+                        // Decompress the data
+                        const decompressed = LZString.decompressFromBase64(data.data);
+                        quizzes = JSON.parse(decompressed);
+                        
+                        // Populate the quiz selector
+                        Object.keys(quizzes).forEach(key => {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = formatQuizName(key);
+                            quizSelect.appendChild(option);
+                        });
+                        
+                        // Show quiz selector
+                        quizSelect.parentElement.style.display = 'block';
+                    } catch (error) {
+                        console.error('Error parsing quiz data:', error);
+                        errorMessage.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading quiz data:', error);
+                    errorMessage.style.display = 'block';
+                });
+            
+            // Handle quiz selection
+            quizSelect.addEventListener('change', function() {
+                const selectedQuiz = this.value;
+                if (selectedQuiz && quizzes[selectedQuiz]) {
+                    displayQuiz(quizzes[selectedQuiz]);
+                } else {
+                    quizContainer.style.display = 'none';
+                }
+            });
+            
+            // Format quiz name for display
+            function formatQuizName(key) {
+                // Example: "Mathematics_class5_english" -> "Mathematics - Class 5 - English"
+                return key
+                    .replace(/_class/, ' - Class ')
+                    .replace(/_/, ' - ')
+                    .replace(/\b\w/g, l => l.toUpperCase());
+            }
+            
+            // Display the selected quiz
+            function displayQuiz(quizData) {
+                quizContainer.innerHTML = '';
+                quizContainer.style.display = 'block';
+                
+                quizData.forEach((question, index) => {
+                    const questionElement = document.createElement('div');
+                    questionElement.className = 'question';
+                    questionElement.dataset.index = index;
+                    
+                    // Question text
+                    const questionTitle = document.createElement('h3');
+                    questionTitle.textContent = `Question ${index + 1}: ${question.question}`;
+                    questionElement.appendChild(questionTitle);
+                    
+                    // Options
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'options';
+                    
+                    Object.entries(question.options).forEach(([key, value]) => {
+                        const option = document.createElement('div');
+                        option.className = 'option';
+                        option.dataset.option = key;
+                        option.textContent = `${key}: ${value}`;
+                        option.addEventListener('click', function() {
+                            // Remove selected class from all options in this question
+                            this.parentElement.querySelectorAll('.option').forEach(opt => {
+                                opt.classList.remove('selected');
+                            });
+                            // Add selected class to this option
+                            this.classList.add('selected');
+                        });
+                        optionsContainer.appendChild(option);
+                    });
+                    
+                    questionElement.appendChild(optionsContainer);
+                    
+                    // Explanation (hidden initially)
+                    const explanation = document.createElement('div');
+                    explanation.className = 'explanation';
+                    explanation.textContent = question.explanation;
+                    questionElement.appendChild(explanation);
+                    
+                    // Check answer button
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', function() {
+                        const selectedOption = optionsContainer.querySelector('.option.selected');
+                        if (selectedOption) {
+                            // Reset all options
+                            optionsContainer.querySelectorAll('.option').forEach(opt => {
+                                opt.classList.remove('correct', 'incorrect');
+                            });
+                            
+                            // Mark selected option as correct or incorrect
+                            if (selectedOption.dataset.option === question.correct_answer) {
+                                selectedOption.classList.add('correct');
+                            } else {
+                                selectedOption.classList.add('incorrect');
+                                // Highlight the correct answer
+                                optionsContainer.querySelector(`[data-option="${question.correct_answer}"]`).classList.add('correct');
+                            }
+                            
+                            // Show explanation
+                            explanation.style.display = 'block';
+                        }
+                    });
+                    questionElement.appendChild(checkButton);
+                    
+                    quizContainer.appendChild(questionElement);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

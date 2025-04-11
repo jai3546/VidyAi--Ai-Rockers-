@@ -1,4 +1,4 @@
 flask
-lz-string
+lzstring
 google-generativeai
 python-dotenv
