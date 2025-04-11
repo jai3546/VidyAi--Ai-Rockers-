@@ -1,0 +1,4 @@
+flask
+lz-string
+google-generativeai
+python-dotenv
